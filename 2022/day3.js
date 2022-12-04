@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-let input = fs.readFileSync('../inputs/day3.txt').toString();
+let input = fs.readFileSync('./inputs/day3.txt').toString();
 let splitInput = input.split('\r\n');
 
 function getPriority(char) {

@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-let input = fs.readFileSync('../inputs/day2.txt').toString();
+let input = fs.readFileSync('./inputs/day2.txt').toString();
 let splitInput = input.split('\r\n');
 console.log(splitInput[0][2])
 
