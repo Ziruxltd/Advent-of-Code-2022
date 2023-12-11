@@ -10,10 +10,10 @@ function isValid(num){
     let y = num.y;
     const regex2 = /^[.]*$/;
 
-    const above = inputLines[y-1] ? inputLines[y-1].slice(num.x-1, num.x+num.length+1) : '.';
-    const below = inputLines[y+1] ? inputLines[y+1].slice(num.x-1, num.x+num.length+1) : '.';
-    const left = inputLines[y][num.x-1];
-    const right = inputLines[y][num.x+num.length];
+    const above = inputLines[y-1] ? (inputLines[y-1][num.x-1] ? inputLines[y-1].slice(num.x-1, num.x+num.length+1) : inputLines[y-1].slice(num.x, num.x+num.length+1)) : '.';
+    const below = inputLines[y+1] ? (inputLines[y+1][num.x-1] ? inputLines[y+1].slice(num.x-1, num.x+num.length+1) : inputLines[y+1].slice(num.x, num.x+num.length+1)) : '.';
+    const left = inputLines[y][num.x-1] ? inputLines[y][num.x-1] : '.';
+    const right = inputLines[y][num.x+num.length] ? inputLines[y][num.x+num.length] : '.';
     
     const testAbove = regex2.test(above);
     const testBelow = regex2.test(below);
@@ -24,7 +24,6 @@ function isValid(num){
         return true;
     }
 }   
-
 for (let i = 0; i < inputLines.length; i++) {
     const line = inputLines[i];
     const regex1 = /\d+/g;
@@ -47,6 +46,4 @@ for (let i = 0; i < inputLines.length; i++) {
 
 }
 const sumOfValidNumbers = validNumbers.reduce((a, b) => a + b, 0);
-console.log(validNumbers);
 console.log(sumOfValidNumbers);
-
