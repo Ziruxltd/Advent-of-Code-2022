@@ -51,141 +51,58 @@ function solution1(){
 };
 
 
-function solution2(){
-    let validNumbers = [];
+function solution2() {
+    const fs = require('fs');
 
-    function getGearRatio(num){
-        numbers = [];
-        const regex2 = /\d+/;
-        const aboveLine = inputLines[num.y-1]
-        const aboveSection = aboveLine.slice(num.x-1,num.x+2);
+    const input = fs.readFileSync('./inputs/day3.txt', 'utf8').trimEnd();
 
-        const belowLine = inputLines[num.y+1]
-        const belowSection = belowLine.slice(num.x-1,num.x+2);
+    const dirs = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
 
-        const left = inputLines[num.y][num.x-1];
-        const right = inputLines[num.y][num.x+1];
-        const regex3 = /\d+/g;
-        if(regex2.test(aboveSection)){
-            let match;
-            // check top line
-            while ((match = regex3.exec(aboveSection)) !== null) {
-                // console.log(match);
-                if(match.index === 0 && match[0].length < 3){
-                    // check left and right if has number
-                    // console.log(aboveLine[num.x-2]);
-                    if (!isNaN(aboveLine[num.x-2])){
-                        match[0] = aboveLine[num.x-2] + match[0]; 
-                        if (match[0].length === 2 && !isNaN(aboveLine[num.x-3])){
-                            match[0] = aboveLine[num.x-3] + match[0];
-                            numbers.push(match[0]);
-                        } else {
-                            numbers.push(match[0]);
-                        }
-                    }
-                } else if (match.index===0 && match[0].length === 3) {
-                    numbers.push(match[0]);
-                } else if (match.index===1) {
-                    if(!isNaN(aboveLine[num.x+2])) {
-                        match[0] = aboveLine[num.x+2] + match[0];
-                        if (match[0].length === 2 && !isNaN(aboveLine[num.x+3])){
-                            match[0] = aboveLine[num.x+3] + match[0];
-                            numbers.push(match[0]);
-                        } else {
-                            numbers.push(match[0]);
-                        }
-                    }
-                } else if (match.index===2) {
-                    if(!isNaN(aboveLine[num.x+2])) {
-                        match[0] = aboveLine[num.x+2] + match[0];
-                        if (match[0].length === 2 && !isNaN(aboveLine[num.x+3])){
-                            match[0] = aboveLine[num.x+3] + match[0];
-                            numbers.push(match[0]);
-                        } else {
-                            numbers.push(match[0]);
-                        }
-                    }
+    const map = input.split('\n').map((line) => line.split(''));
+    let sum = 0;
+    for (let i = 0; i < map.length; i++) {
+      for (let j = 0; j < map[i].length; j++) {
+        if (/\*/.test(map[i][j])) {
+          const gears = [];
+          for (let [di, dj] of dirs) {
+            if (/\d/.test(map[i + di][j + dj])) {
+              const digits = [map[i + di][j + dj]];
+              for (let j2 = j + dj - 1; j2 >= 0; j2--) {
+                if (/\d/.test(map[i + di][j2])) {
+                  digits.unshift(map[i + di][j2]);
+                  map[i + di][j2] = '.';
+                } else {
+                  break;
                 }
-            }
-
-            // check bot line
-            while ((match = regex3.exec(belowSection)) !== null) {
-                // console.log(match);
-                if(match.index === 0 && match[0].length < 3){
-                    // check left and right if has number
-                    // console.log(aboveLine[num.x-2]);
-                    if (!isNaN(belowLine[num.x-2])){
-                        match[0] = belowLine[num.x-2] + match[0]; 
-                        if (match[0].length === 2 && !isNaN(belowLine[num.x-3])){
-                            match[0] = belowLine[num.x-3] + match[0];
-                            numbers.push(match[0]);
-                        } else {
-                            numbers.push(match[0]);
-                        }
-                    }
-                } else if (match.index===0 && match[0].length === 3) {
-                    numbers.push(match[0]);
-                } else if (match.index===1) {
-                    if(!isNaN(belowLine[num.x+2])) {
-                        match[0] = belowLine[num.x+2]; + match[0]
-                        console.log(match[0].length);
-                        if (match[0].length === 2 && !isNaN(belowLine[num.x+3])){
-                            match[0] = belowLine[num.x+3] + match[0]; 
-                            console.log(match[0]);
-                            numbers.push(match[0]);
-                        } else {
-                            numbers.push(match[0]);
-                        }
-                    }
-                } else if (match.index===2) {
-                    if(!isNaN(belowLine[num.x+2])) {
-                        match[0] = belowLine[num.x+2] + match[0];
-                        if (match[0].length === 2 && !isNaN(belowLine[num.x+3])){
-                            match[0] = belowLine[num.x+3] + match[0];
-                            numbers.push(match[0]);
-                        } else {
-                            numbers.push(match[0]);
-                        }
-                    }
+              }
+              for (let j2 = j + dj + 1; j2 < map[i + di].length; j2++) {
+                if (/\d/.test(map[i + di][j2])) {
+                  digits.push(map[i + di][j2]);
+                  map[i + di][j2] = '.';
+                } else {
+                  break;
                 }
+              }
+              gears.push(+digits.join(''));
             }
-
-            // check left
-            if(!isNaN(left)){
-                let n = left;
-                for (let i = 0; i < 3; i++){
-                    if(!isNaN(inputLines[num.y][num.x-i-2])){
-                        n = inputLines[num.y][num.x-i-2] + n;
-                    }
-                }
-            }
-            
+          }
+          if (gears.length === 2) {
+            sum += gears[0] * gears[1];
+          }
         }
-        // console.log(numbers);       
-    }   
-    
-    
-    for (let i = 0; i < inputLines.length; i++) {
-        const line = inputLines[i];
-        const regex1 = /\*/g;
-        let match;
-        let aster = [];
-        while ((match = regex1.exec(line)) !== null) {
-            aster.push({
-                number: match[0],
-                y: i,
-                x: match.index
-            })
-        }
-
-        for (num of aster){
-            let gearRatio = getGearRatio(num);
-            validNumbers.push(gearRatio);
-        }
-        
+      }
     }
-    return 'no solution yet'
-}
+    return sum;
+  }
 
 console.log('Solution 1: ',solution1());
 console.log('Solution 2: ',solution2());
