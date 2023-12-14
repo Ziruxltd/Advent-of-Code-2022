@@ -14,7 +14,6 @@ function solution1(lines) {
         for (n of numbers) {
             if (winners.includes(n)) {
                 gamePoints == 0 ? gamePoints++ : gamePoints = gamePoints*2;
-                // console.log(gamePoints);
             }
         }
         points += gamePoints;
@@ -22,5 +21,21 @@ function solution1(lines) {
     return points;
 }
 
+function solution2(lines) {
+    let nCards = lines.map(() => 1)
+
+    for (let i = 0; i < lines.length; i++) {
+        const game = lines[i].split(':')[1];
+        let [winners, numbers] = game.split('|').map(s => s.split(' ').filter(Boolean).map(Number));
+        const nWins = numbers.filter((n) => winners.includes(n)).length;
+        for (let j = 0; j < nWins; j++) {
+            nCards[i + 1 + j] += nCards[i];
+        }
+    }
+    return nCards.reduce((a, b) => a + b);
+
+}
+
 
 console.log('Solution 1: ',solution1(lines));
+console.log('Solution 2: ',solution2(lines));
