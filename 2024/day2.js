@@ -3,14 +3,6 @@ const fs = require('fs');
 const input = fs.readFileSync('./inputs/day2.txt').toString().replace(/\r/g, '');
 const lines = input.split('\n');
 const splitLines = lines.map(line => line.split(' ').map(Number));
-// const splitLines = [
-//   [7,6,4,2,1],
-//   [1,2,7,8,9],
-//   [9,7,6,2,1],
-//   [1,3,2,4,5],
-//   [8,6,4,4,1],
-//   [1,3,6,7,9]
-// ];
 
 function solution1(splitLines) {
   let safeReports = 0;
