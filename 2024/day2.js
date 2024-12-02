@@ -6,25 +6,33 @@ const splitLines = lines.map(line => line.split(' ').map(Number));
 
 function solution1(splitLines) {
   let safeReports = 0;
-  for (let i = 0; i < splitLines.length; i++) {
+
+  for (const line of splitLines) {
     let isSafe = true;
-    let array = [];
-    for (let j = 0; j < splitLines[i].length - 1; j++) {
-      const rest = splitLines[i][j] - splitLines[i][j + 1]
-      array.push(rest);
-      const diff = Math.abs(rest);
-      if (diff < 1 || diff > 3) {
+    let isIncreasing = null;
+
+    for (let i = 0; i < line.length - 1; i++) {
+      const diff = line[i] - line[i + 1];
+
+      if (Math.abs(diff) < 1 || Math.abs(diff) > 3) {
+        isSafe = false;
+        break;
+      }
+
+      if (isIncreasing === null) {
+        isIncreasing = diff > 0;
+      } else if ((isIncreasing && diff <= 0) || (!isIncreasing && diff >= 0)) {
         isSafe = false;
         break;
       }
     }
-    if (isSafe && (array.every((value) => value > 0) || array.every((value) => value < 0))) {
+
+    if (isSafe) {
       safeReports++;
     }
   }
+
   return safeReports;
 }
-
-
 
 console.log('Solution 1: ', solution1(splitLines));
