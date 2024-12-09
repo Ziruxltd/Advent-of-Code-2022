@@ -10,7 +10,6 @@ function solution1 (map) {
       return Array(parseInt(val)).fill('.')
     }
   }).flat()
-  console.log(idArray);
   
   let totalNumbers = idArray.reduce((total, current) => {
     if (current !== '.') {
@@ -40,4 +39,33 @@ function solution1 (map) {
   return sum
 }
 
-console.log('Solution 1: ', solution1(input))
+function solution2(map) {
+  let idArray = map.split('').map((val,idx) => {
+    if (idx % 2 === 0) {
+      return Array(parseInt(val)).fill(idx / 2)
+    } else {
+      return Array(parseInt(val)).fill('.')
+    }
+  }).flat()
+  console.log(idArray);
+
+  let currentNumber = null
+  let numberIdx = null
+  let numberLength = 0
+  for (let i = 0; i > idArray.length; i++) {
+
+  }
+
+
+  let sum = 0
+  for (let i = 0; i < idArray.length; i++) {
+    if (idArray[i] === '.') break
+    const result = i * parseInt(idArray[i])
+    sum += result
+  }
+
+  return sum
+}
+
+// console.log('Solution 1: ', solution1(input))
+console.log('Soluution 2: ', solution2(map));
