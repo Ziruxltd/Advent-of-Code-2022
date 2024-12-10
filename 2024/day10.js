@@ -81,6 +81,82 @@ function findStartingNodes(map) {
   return nodes
 }
 
+function solution2(map) {
+  let totalTrailScore = 0
+  const startingNodes = findStartingNodes(map)
+
+  for (let start of startingNodes) {
+    let trailScore = 0
+    let open = [start]
+    let close = []
+
+    while (open.length > 0) {
+      const curr = open.pop()
+      if (curr.value === 9) {
+        trailScore++        
+      } else {
+        //check top
+        if (map[curr.y - 1] && map[curr.y - 1][curr.x] === curr.value + 1) {
+          open.push({
+            y: curr.y - 1,
+            x: curr.x,
+            value: map[curr.y - 1][curr.x],
+            parent: curr
+          })
+        }
+        // check rigth
+        if (map[curr.y][curr.x + 1] && map[curr.y][curr.x +1] === curr.value + 1) {
+          open.push({
+            y: curr.y,
+            x: curr.x + 1,
+            value: map[curr.y][curr.x + 1],
+            parent: curr
+          })
+        }
+        //check bot
+        if (map[curr.y + 1] && map[curr.y + 1][curr.x] === curr.value + 1) {
+          open.push({
+            y: curr.y + 1,
+            x: curr.x,
+            value: map[curr.y + 1][curr.x],
+            parent: curr
+          })
+        }
+        //check left
+        if (map[curr.y][curr.x - 1] && map[curr.y][curr.x - 1] === curr.value + 1) {
+          open.push({
+            y: curr.y,
+            x: curr.x - 1,
+            value: map[curr.y][curr.x - 1],
+            parent: curr
+          })
+        }
+      }
+      close.push(curr)
+    }
+    totalTrailScore += trailScore
+  }
+
+  return totalTrailScore
+}
+
+function findStartingNodes(map) {
+  const nodes = []
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[y].length; x++){
+      if (map[y][x] === 0) {
+        nodes.push({
+          y: y,
+          x: x,
+          value: map[y][x],
+          parent: null
+        })
+      }
+    }
+  }  
+  return nodes
+}
+
 const grid = [
   [8, 9, 0, 1, 0, 1, 2, 3],
   [7, 8, 1, 2, 1, 8, 7, 4],
@@ -93,3 +169,4 @@ const grid = [
 ];
 
 console.log('Solution 1: ', solution1(map));
+console.log('Solution 2: ', solution2(map))
