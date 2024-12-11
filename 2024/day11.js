@@ -1,28 +1,30 @@
-const stones = '3279 998884 1832781 517 8 18864 28 0'.split(' ');
-// const stones = '125 17'.split(' ');
+const stones = '3279 998884 1832781 517 8 18864 28 0'.split(' ').map(Number);
 
 function solutions(stones, times) {
-  let rocks = [...stones];
+  const cache = new Map()
 
-  for (let i = 0; i < times; i++) {
-    for (let j = 0; j < rocks.length; j++) {
-      if (rocks[j] === '0') {
-        rocks[j] = '1';
-      } else if (rocks[j].length % 2 === 0) {
-        const digits = rocks[j].length / 2;
-        const left = rocks[j].slice(0, digits);
-        let right = Number(rocks[j].slice(digits)).toString();
+  function blink(rock, times) {
+    const cacheKey = `${rock}-${times}`
+    if (cache.has(cacheKey)) return cache.get(cacheKey)
 
-        rocks.splice(j, 1, left, right);
-        j++; // Skip the next element since it's already processed
-      } else {
-        const result = Number(rocks[j]) * 2024;
-        rocks[j] = result.toString();
-      }
+    let result
+    if (times === 0) {
+      result = 1
+    } else if (rock === 0) {
+      result = blink(1, times - 1)
+    } else if (rock.toString().length % 2 === 0) {
+      const left = Number(rock.toString().substring(0, rock.toString().length / 2));
+      const right = Number(rock.toString().substring(rock.toString().length / 2));
+      result = blink(left, times - 1) + blink(right, times - 1)
+    } else {
+      result = blink(rock * 2024, times - 1)
     }
-    console.log('Loop:', i, 'rocks length:', rocks.length);
+
+    cache.set(cacheKey, result)
+    return result
   }
-  return rocks.length;
+
+  return stones.reduce((total, rock) => total + blink(rock, times), 0)
 }
 
 console.log('Solution 1:', solutions(stones, 25));
